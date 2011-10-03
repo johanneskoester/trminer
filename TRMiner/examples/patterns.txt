@@ -1,0 +1,5 @@
+pcpp	p
+ppcp	p
+ippm	p
+pph	p
+papi	p
