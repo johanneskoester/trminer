@@ -14,6 +14,7 @@ setup(
     description = 'mine scientific publications for interesting sentences using patterns',
     license = 'MIT',
     package_dir = {'': 'lib'},
+    package_data={'trminer': ['*.html']},
     packages = ['trminer'],
     scripts = ['trminer'],
     classifiers = [

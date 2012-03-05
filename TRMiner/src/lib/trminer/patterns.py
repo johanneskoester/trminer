@@ -22,7 +22,7 @@ class Patterns:
 				u = l[1] if len(l) > 1 else ""
 				self.__patterns.append(p)
 				self.__unique.append(u)
-				self.__tokens.append(frozenset(p))
+				self.__tokens.append(frozenset(re.sub(r'\W+', '', p)))
 		
 		self.disjunction = "(?P<pattern0>" + self.__patterns[0] + ")"
 		for i in range(1,len(self.__patterns)):

@@ -1,5 +1,7 @@
+# -*- coding: utf-8 -*-
+
 import re
-from genshi.template import MarkupTemplate
+from jinja2 import Template
 import os
 from tokenizer import Wordsplitter
 
@@ -51,14 +53,18 @@ class HTMLOutput:
 				patterns[pattern] = 0
 		
 		htmlfile = open(self.__outputfilepath, "w")
-		tmpl = MarkupTemplate(open(os.path.join(os.path.dirname(__file__),'output.html')))
-		stream = tmpl.generate(papers = self.__papers, patterns = patterns, tokens = self.__tokens)
-		htmlfile.write(stream.render())
+		#tmpl = MarkupTemplate(open(os.path.join(os.path.dirname(__file__),'output.html')))
+		#stream = tmpl.generate(papers = self.__papers, patterns = patterns, tokens = self.__tokens)
+		template = Template(open(os.path.join(os.path.dirname(__file__),'output.html')).read())
+		
+		html = template.render(papers = self.__papers, patterns = patterns, tokens = self.__tokens, allpatterns = sum(patterns.values()), numpapers = len(self.__papers)
+			).encode("utf-8")
+		htmlfile.write(html)
 		htmlfile.close()
 
 class Paper:
 	"""
-	Container for information and matches of a paper.	
+	Container for information and matches of a paper.
 	"""
 	
 	def __init__(self, title, filepath, filename):

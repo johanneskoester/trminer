@@ -18,6 +18,7 @@ from trminer.patterns import *
 from trminer.output import HTMLOutput
 from trminer.xmltotext import XML_to_text
 from threading import Thread
+from pyPdf import PdfFileReader
 
 def main():
 	usage = "usage: %prog [options] [--mine|--tokenize|-m|-t] <.pdf or .html files>"
@@ -98,13 +99,18 @@ class Convert(Thread):
 				if filepath.endswith(".html") or filepath.endswith(".htm"):
 					os.system("html2text -o {1} {0}".format(filepath, textfilepath))
 				elif filepath.endswith(".pdf"):
-					os.system("pdftotext -q {0} {1}".format(filepath, textfilepath))
+					#os.system("pdftotext -q {0} {1}".format(filepath, textfilepath))
+					 pdftotext(filepath, textfilepath)
 				elif filepath.endswith("xml"):
 					XML_to_text(filepath, textfilepath)
 				else:
 					self.__parser.print_help()
 					exit(1)
 			self.__progress.increment()
+		
+def pdftotext(filepath, textfilepath):
+	pdffile = PdfFileReader(open(filepath, "rb"))
+	
 
 def error_filenotfound(filepath):
 	print("Error: {} does not exist".format(filepath), file=sys.stderr)
@@ -136,7 +142,7 @@ class Match(Thread):
 	
 	def run(self):
 		for textfilepath, tokenizedfilepath, indexfilepath, lastindexfilepath, tokenlengthindexfilepath, filepath, _ in self.__files:
-			if not os.path.exists(textfilepath):
+			if not os.path.exists(textfilepath) or not os.path.exists(tokenizedfilepath):
 				error_filenotfound(textfilepath)
 				continue
 			paper = None

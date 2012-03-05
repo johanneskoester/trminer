@@ -1,6 +1,5 @@
-<?python from genshi import HTML ?>
 <!DOCTYPE html>
-<html xmlns:py="http://genshi.edgewall.org/">
+<html>
 <head>
 <title>TRMiner</title>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
@@ -441,28 +440,32 @@ useful</a> | <a class="mutexfilter filter unsure" href="javascript:void(0)"
 		<th>Pattern</th>
 		<th>Matches</th>
 	</tr>
-	<tr py:for="pattern in patterns">
-		<th>$pattern</th>
-		<td class="numeric">${patterns[pattern]}</td>
+	{% for pattern in patterns %}
+	<tr>
+		<th>{{ pattern }}</th>
+		<td class="numeric">{{ patterns[pattern] }}</td>
 	</tr>
+	{% endfor %}
 	<tr>
 		<th></th>
-		<td class="numeric">${sum(patterns.values())}</td>
+		<td class="numeric">{{ allpatterns }}</td>
 	</tr>
 </table>
 
 <table>
 	<tr>
 		<th>Papers containing matches</th>
-		<td class="numeric">${len(papers)}</td>
+		<td class="numeric">{{ numpapers }}</td>
 	</tr>
 </table>
 
 <table>
-	<tr py:for="token in tokens">
-		<th>$token</th>
-		<td>${", ".join(tokens.words(token))}</td>
+	{% for token in tokens %}
+	<tr>
+		<th>{{ token }}</th>
+		<td>{{ ", ".join(tokens.words(token)) }}</td>
 	</tr>
+	{% endfor %}
 </table>
 </div>
 
@@ -471,29 +474,35 @@ useful</a> | <a class="mutexfilter filter unsure" href="javascript:void(0)"
 	<tr>
 		<th>Patterns</th>
 	</tr>
-	<tr py:for="pattern in patterns">
+	
+	{% for pattern in patterns %}
+	<tr>
 		<th><a class="filter active" href="javascript:void(0)"
-			onclick="toggleActive(this);patternfilter('$pattern',this.classList.contains('active'));">$pattern</a></th>
+			onclick="toggleActive(this);patternfilter('{{ pattern }}',this.classList.contains('active'));">{{ pattern }}</a></th>
 	</tr>
+	{% endfor %}
 </table>
 
 <table>
-	<tr py:for="token in tokens">
-		<th>$token</th>
-		<td>${", ".join(tokens.words(token))}</td>
+	{% for token in tokens %}
+	<tr>
+		<th>{{ token }}</th>
+		<td>{{ ", ".join(tokens.words(token)) }}</td>
 	</tr>
+	{% endfor %}
 </table>
 </div>
 
 <div id="papers" class="dialog">
-<div py:for="paper in papers" class="paper" id="${paper.filename}"
-	path="${paper.filepath}">
+{% for paper in papers %}
+<div class="paper" id="{{ paper.filename }}"
+	path="{{ paper.filepath }}">
 <table>
 	<tr>
-		<th>${paper.text}</th>
-		<th class="controls"><a href="${paper.filepath}">Open File</a> | <a
+		<th>{{ paper.text }}</th>
+		<th class="controls"><a href="{{ paper.filepath }}">Open File</a> | <a
 			target="_blank"
-			href="http://www.ncbi.nlm.nih.gov/pubmed?term=${paper.searchterm}">Pubmed</a>
+			href="http://www.ncbi.nlm.nih.gov/pubmed?term={{ paper.searchterm }}">Pubmed</a>
 		| <a class="markUseful" href="javascript:void(0)"
 			onclick="mark(getPaperElement(this), 'useful')">useful</a> | <a
 			class="markNotuseful" href="javascript:void(0)"
@@ -501,12 +510,15 @@ useful</a> | <a class="mutexfilter filter unsure" href="javascript:void(0)"
 			class="markUnsure" href="javascript:void(0)"
 			onclick="mark(getPaperElement(this), 'unsure')">unsure</a></th>
 	</tr>
-	<tr py:for="match in paper.matches">
-		<td colspan="2" class="match" pattern="${match.pattern}">
-		${HTML(match.text)}</td>
+	{% for match in paper.matches %}
+	<tr>
+		<td colspan="2" class="match" pattern="{{ match.pattern }}">
+		{{ match.text }}</td>
 	</tr>
+	{% endfor %}
 </table>
 </div>
+{% endfor %}
 </div>
 </body>
 </html>
