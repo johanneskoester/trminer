@@ -8,7 +8,7 @@ The approach works in two steps. First, texts are tranlated into sequences of to
 
 You need to have Python >= 2.7. TRMiner is listed in the Python Package Index. You can therefore install it with:
 ```bash
-easy_install trminer
+$ easy_install trminer
 ```
 in a terminal.
 
@@ -36,6 +36,6 @@ The output of the mining step is an HTML 5 file, providing an interface to rate 
 
 Execute
 ```bash
-trminer
+$ trminer
 ```
 in a terminal to get help with the command line interface usage. 
